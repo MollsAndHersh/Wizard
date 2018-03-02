@@ -1,0 +1,37 @@
+﻿.wizard-form *{
+    box-sizing:border-box;
+}
+.wizard-form{
+    box-sizing:border-box;
+    border:2px solid #333;
+    background:linear-gradient(to bottom right,#777,#555);
+    box-shadow:6px 6px 10px #444;
+    margin:20px auto;
+    padding:20px 50px;
+    overflow:hidden;
+}
+.wizard-form fieldset {
+    background:linear-gradient(to bottom right, #fff,#d9d9d9);
+    display: inline-block;
+    position: relative;
+    border-top: 20px solid #333;
+    border-bottom: 10px solid #999;
+    border-radius:5px;
+    box-shadow: 4px 4px 5px #333344;
+    float: left;
+    padding: 10px;
+    margin: 20px;
+    opacity:.1;
+    min-height:250px;
+    transition:opacity ease-in .1s, min-height ease-in-out .5s;
+    overflow:hidden;
+}
+.wizard-form fieldset.active {
+    /*display: inline-block;*/
+    opacity:1;
+    min-height:400px;
+}
+.wizard-form .wizard-form-pages {
+    transition: transform ease-out .2s;
+    min-height:500px;
+}

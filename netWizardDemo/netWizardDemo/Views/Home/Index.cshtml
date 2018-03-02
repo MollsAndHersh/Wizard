@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+@using (Html.BeginForm("AddNewUser", "Home", FormMethod.Post, new { @class = "wizard-form"}))
+{
+    //@Html.AntiForgeryToken();
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="wizard-form-nav btn-group btn-group-justified">
+    </div>
+    <div class="wizard-form-pages">
+        <fieldset name="Create User" data-url="@Url.Action("UserWizard", "MUsers")"></fieldset>
+        <fieldset name="Add Applications" data-url="@Url.Action("ApplicationWizard", "MApplications")"></fieldset>
+        <fieldset name="Add Addresses" data-url="@Url.Action("AddressWizard", "MAddresses")"></fieldset>
+    </div>
+    <div class="wizard-form-controls btn-group btn-group-justified">
+    </div>
+}
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $(".wizard-form").Wizard({
+                size: 500, 
+                onSubmit: function (e, form) {
+                    alert(form.serialize());
+                    //e.preventDefault();
+                    //alert("I was submitted");
+                }
+            });
+        });
+    </script>
+}

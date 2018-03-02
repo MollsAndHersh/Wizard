@@ -1,0 +1,76 @@
+﻿@model netWizardDemo.Models.MUser
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>MUser</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Username)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Username)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EMail)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EMail)
+        </dd>
+
+    </dl>
+</div>
+<h3>Applications:</h3>
+<dl class="dl-horizontal">
+@foreach (var app in Model.Applications)
+{
+    <dt>
+        @Html.DisplayNameFor(m => app.Name)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(m => app.Name)
+    </dd>
+}
+</dl>
+<h3>Addresses:</h3>
+<dl class="dl-horizontal">
+    @foreach (var add in Model.Addresses)
+    {
+        <dt>
+            @Html.DisplayNameFor(m => add.StreetAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(m => add.StreetAddress)
+        </dd>
+    }
+</dl>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
