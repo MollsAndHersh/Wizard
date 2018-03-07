@@ -33,20 +33,21 @@
                 
                 var url = fieldset.data("url");
                 fieldset.attr("data-wizard-page-num", fieldsets.index(fieldset) + 1);
-                
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    success: function (response) {
-                        fieldset.html(response);     
-                        ajaxCount++;
-                        if (ajaxCount === fieldsets.length) {
-                            $(".wizard-addable", form).Addable(0,form);
-                            ResetFormValidation(form);
-                            ajaxCount = 0;
+                if (url != null) {
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        success: function (response) {
+                            fieldset.html(response);
+                            //ajaxCount++;
+                            //if (ajaxCount === fieldsets.length) {
+                                $(".wizard-addable", fieldset).Addable(0, form);
+                                ResetFormValidation(form);
+                               // ajaxCount = 0;
+                            //}
                         }
-                    }
-                })
+                    })
+                }
             });
 
             //Set up the control buttons
@@ -66,6 +67,9 @@
             controls.append(divClone);
 
             next.on("click", function () {
+                if (opts.loadOnNext) {
+                    OnNext(form);
+                }
                 ChangePage(form, 1); 
                 
             });
@@ -156,7 +160,8 @@
         },
         onSubmit: function () {
             alert("I was submitted");
-        }
+        },
+        loadOnNext: false
     }
     function Init(form, options) {
 
@@ -271,5 +276,40 @@
         var nav = $(".wizard-form-nav", form);
         var button = $("div:nth-child(" + index + ") input", nav);
         button.toggleClass(form.data("options").buttons.classes.ValidationWarning);
+    }
+
+    //data-wizard-on-next='{"controller":"Home","action":"TabPage"}'
+    //{ @class = "form-control route-value", data_route_id = "name" }
+    function OnNext(form) {
+        var currentIndex = form.data("wizard-current-index");
+        var newIndex = (currentIndex >= form.data("wizard-total-pages")) ? 1 : currentIndex + 1;
+        var fieldset = $("fieldset.active", form);
+        var nextFieldset = $("fieldset:nth-child(" + newIndex + ")", form);
+        if (fieldset.data("wizard-on-next") != null) {
+            var fieldsetUrl = fieldset.data("wizard-on-next").controller + "\\" +
+                fieldset.data("wizard-on-next").action + "?";
+            var routeValues = $(".route-value", fieldset);
+            routeValues.each(function (index) {
+
+                if (!$(this).prop("disabled")) {
+                    fieldsetUrl += $(this).data("route-id") + "=" + $(this).val();
+                    if (index != routeValues.length - 1 &&
+                        !$(routeValues[index + 1]).prop("disabled")) {
+                        fieldsetUrl += "&";
+                    }
+                }
+            });
+            alert(fieldsetUrl);
+            $.ajax({
+                type: "POST",
+                url: fieldsetUrl,
+                success: function (response) {
+                    nextFieldset.html(response);
+
+                    $(".wizard-addable", nextFieldset).Addable(0, form);
+                    ResetFormValidation(form);
+                }
+            })
+        }
     }
 }(jQuery));

@@ -5,7 +5,7 @@ Proper documentation is on my long list of things to do, but this might get you 
 # Setup
 Put something like this where you want the form to be:
 
-```html
+```
 @using (Html.BeginForm("AddNewUser", "Home", FormMethod.Post, new { @class = "wizard-form"}))
 { 
     @Html.AntiForgeryToken();
@@ -24,7 +24,7 @@ Put something like this where you want the form to be:
 
 Initialize the form with:
 
-```javascript
+```
 <script>
     $(document).ready(function () {
         $(".wizard-form").Wizard({
@@ -37,8 +37,9 @@ Initialize the form with:
         });
     });
 </script>
-```	
+```
 
 For your form fields, simply create views that return the desired set of fields on each wizard page.  Each fieldset represents a different step in the Wizard.
 
-This plugin also supports dynamically added fields.  Refer to the demo solution for guidance on this.
+This plugin also supports dynamically added fields.  Refer to the demo solution for guidance on this:
+https://github.com/vtsells/Wizard/tree/master/netWizardDemo
