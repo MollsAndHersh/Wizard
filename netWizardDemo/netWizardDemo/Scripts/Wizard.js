@@ -284,32 +284,64 @@
         var currentIndex = form.data("wizard-current-index");
         var newIndex = (currentIndex >= form.data("wizard-total-pages")) ? 1 : currentIndex + 1;
         var fieldset = $("fieldset.active", form);
-        var nextFieldset = $("fieldset:nth-child(" + newIndex + ")", form);
+       // var nextFieldset = $("fieldset:nth-child(" + newIndex + ")", form);
         if (fieldset.data("wizard-on-next") != null) {
-            var fieldsetUrl = fieldset.data("wizard-on-next").controller + "\\" +
-                fieldset.data("wizard-on-next").action + "?";
-            var routeValues = $(".route-value", fieldset);
-            routeValues.each(function (index) {
 
-                if (!$(this).prop("disabled")) {
-                    fieldsetUrl += $(this).data("route-id") + "=" + $(this).val();
-                    if (index != routeValues.length - 1 &&
-                        !$(routeValues[index + 1]).prop("disabled")) {
-                        fieldsetUrl += "&";
+            var actions = fieldset.data("wizard-on-next");
+            for (var i = 0; i < actions.length; i++) {
+                var fieldsetUrl = actions[i].Controller + "\\" + actions[i].Action + "?";
+                var routeValues = $(".route-value", fieldset);
+                routeValues.each(function (index) {
+
+                    if (!$(this).prop("disabled")) {
+                        fieldsetUrl += $(this).data("route-id") + "=" + $(this).val();
+                        if (index != routeValues.length - 1 &&
+                            !$(routeValues[index + 1]).prop("disabled")) {
+                            fieldsetUrl += "&";
+                        }
                     }
-                }
-            });
-            alert(fieldsetUrl);
-            $.ajax({
-                type: "POST",
-                url: fieldsetUrl,
-                success: function (response) {
-                    nextFieldset.html(response);
+                });
+                var target = actions[i].Target;
+                
+                var nextFieldset = $("fieldset[name='" + target + "']", form);
+                (function (fieldsetUrl, nextFieldset, form) {
+                    $.ajax({
+                        type: "POST",
+                        url: fieldsetUrl,
+                        success: function (response) {
+                            nextFieldset.html(response);
+                            $(".wizard-addable", nextFieldset).Addable(0, form);
+                            ResetFormValidation(form);
+                        }
+                    })
 
-                    $(".wizard-addable", nextFieldset).Addable(0, form);
-                    ResetFormValidation(form);
-                }
-            })
+                })(fieldsetUrl, nextFieldset, form);
+
+            }
+            //var fieldsetUrl = fieldset.data("wizard-on-next").controller + "\\" +
+            //    fieldset.data("wizard-on-next").action + "?";
+            //var routeValues = $(".route-value", fieldset);
+            //routeValues.each(function (index) {
+
+            //    if (!$(this).prop("disabled")) {
+            //        fieldsetUrl += $(this).data("route-id") + "=" + $(this).val();
+            //        if (index != routeValues.length - 1 &&
+            //            !$(routeValues[index + 1]).prop("disabled")) {
+            //            fieldsetUrl += "&";
+            //        }
+            //    }
+            //});
+            //alert(fieldsetUrl);
+            //$.ajax({
+            //    type: "POST",
+            //    url: fieldsetUrl,
+            //    success: function (response) {
+            //        nextFieldset.html(response);
+
+            //        $(".wizard-addable", nextFieldset).Addable(0, form);
+            //        ResetFormValidation(form);
+            //    }
+            //})
         }
     }
 }(jQuery));
